@@ -2,7 +2,7 @@ import yaml
 from yaml import Loader
 import logging
 import time
-import threading
+from threading import *
 
 pathList = []
 
@@ -13,6 +13,10 @@ def path2String(pathList):
 
 def timeFunction(func_name, exe_time):
     time.sleep(int(exe_time))
+
+
+def Concurrent():
+    time.sleep(1)
 
 
 def generateLogFile(data, key, isConcurrent=False):
@@ -28,9 +32,10 @@ def generateLogFile(data, key, isConcurrent=False):
             logging.warning(path2String(pathList) + " Executing " +
                             "TimeFunction " + "(" + func_name + ", " + exe_time + ")")
             if isConcurrent:
-                t1 = threading.Thread()
+                t1 = Thread(target=Concurrent)
                 t1.start()
                 timeFunction(func_name, exe_time)
+
             else:
                 timeFunction(func_name, exe_time)
     elif (data['Type'] == 'Flow'):
