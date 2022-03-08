@@ -41,15 +41,15 @@ def generateLogFile(data, key):
 
 
 # Opening yaml file
-yaml_file = open('DataSet\Milestone1/Milestone1A.yaml', mode='r')
-
-# Reading data from yaml file
-data = yaml.load(yaml_file, Loader=Loader)
+with open("DataSet\Milestone1\Milestone1A.yaml", "r") as stream:
+    try:
+        data = yaml.safe_load(stream)
+    except yaml.YAMLError as exc:
+        print(exc)
 
 # Generating log files using data dictionary obtained from yaml file
 logging.basicConfig(filename="logfile.txt", format="%(asctime)s.%(msecs)06d;%(message)s",
                     datefmt='%Y-%m-%d %H:%M:%S', filemode='w')
 
-print(data)
 for workflow in data:
     generateLogFile(data[workflow], workflow)
