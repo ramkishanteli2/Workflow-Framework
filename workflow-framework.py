@@ -1,6 +1,7 @@
 import yaml
 from yaml import Loader
 import logging
+import time
 
 pathList = []
 
@@ -10,7 +11,7 @@ def path2String(pathList):
 
 
 def timeFunction(func_name, exe_time):
-    pass
+    time.sleep(int(exe_time))
 
 
 def generateLogFile(data, key):
@@ -26,7 +27,6 @@ def generateLogFile(data, key):
             logging.warning(path2String(pathList) + " Executing " +
                             "TimeFunction " + "(" + func_name + ", " + exe_time + ")")
             timeFunction(func_name, exe_time)
-
     elif (data['Type'] == 'Flow'):
 
         if(data['Execution'] == 'Sequential'):
