@@ -22,7 +22,7 @@ def generateLogFile(data, key):
 
             timeFunction(func_name, exe_time)
             path.pop()
-    logger.info(convertPath2String(path) + " Exit")
+    logging.info(convertPath2String(path) + " Exit")
     path.pop()
 
 
