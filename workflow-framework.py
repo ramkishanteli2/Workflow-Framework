@@ -2,6 +2,7 @@ import yaml
 from yaml import Loader
 import logging
 import time
+import threading
 
 pathList = []
 
@@ -14,7 +15,7 @@ def timeFunction(func_name, exe_time):
     time.sleep(int(exe_time))
 
 
-def generateLogFile(data, key):
+def generateLogFile(data, key, isConcurrent=False):
     pathList.append(key)
     logging.warning(path2String(pathList) + " Entry")
 
@@ -26,7 +27,12 @@ def generateLogFile(data, key):
             exe_time = data['Inputs']['ExecutionTime']
             logging.warning(path2String(pathList) + " Executing " +
                             "TimeFunction " + "(" + func_name + ", " + exe_time + ")")
-            timeFunction(func_name, exe_time)
+            if isConcurrent:
+                t1 = threading.Thread()
+                t1.start()
+                timeFunction(func_name, exe_time)
+            else:
+                timeFunction(func_name, exe_time)
     elif (data['Type'] == 'Flow'):
 
         if(data['Execution'] == 'Sequential'):
@@ -34,14 +40,15 @@ def generateLogFile(data, key):
                 generateLogFile(data['Activities'][activity], activity)
 
         elif(data['Execution'] == 'Concurrent'):
-            # INCOMPLETE
-            pass
+            for activity in data['Activities']:
+                generateLogFile(data['Activities'][activity],
+                                activity, isConcurrent=True)
     logging.warning(path2String(pathList) + " Exit")
     pathList.pop()
 
 
 # Opening yaml file
-with open("DataSet\Milestone1\Milestone1A.yaml", "r") as stream:
+with open("DataSet\Milestone1\Milestone1B.yaml", "r") as stream:
     try:
         data = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
